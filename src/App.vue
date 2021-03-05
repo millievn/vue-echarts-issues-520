@@ -1,19 +1,56 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="bar">
+      <v-chart ref="bar" :option="barOptions" autoresize />
+    </div>
   </div>
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
+<script lang="ts">
+import Vue from 'vue'
+import { use } from 'echarts/core'
+import { CanvasRenderer } from 'echarts/renderers'
+import { PieChart, BarChart } from 'echarts/charts'
+import { TitleComponent, TooltipComponent, LegendComponent, DatasetComponent, GridComponent } from 'echarts/components'
+import { default as VChart, THEME_KEY } from 'vue-echarts'
 
-export default {
+use([
+  CanvasRenderer,
+  PieChart,
+  BarChart,
+  TitleComponent,
+  TooltipComponent,
+  LegendComponent,
+  DatasetComponent,
+  GridComponent,
+])
+
+export default Vue.extend({
   name: 'App',
   components: {
-    HelloWorld
-  }
-}
+    VChart,
+  },
+  provide: {
+    [THEME_KEY]: 'light',
+  },
+  data() {
+    return {
+      barOptions: {
+        legend: {},
+        tooltip: {},
+        dataset: {
+          source: [
+            ['product', 'name', 'price'],
+            ['test', 'name', 1],
+          ],
+        },
+        xAxis: { type: 'category' },
+        yAxis: {},
+        series: [{ type: 'bar' }, { type: 'bar' }],
+      },
+    }
+  },
+})
 </script>
 
 <style>
@@ -24,5 +61,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.bar {
+  height: 500px;
 }
 </style>
